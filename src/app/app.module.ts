@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { PeopleModule } from './people/people.module';
@@ -15,7 +16,7 @@ import { environment } from '../environments/environment';
   imports: [
     BrowserModule,
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    PeopleModule
+    PeopleModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -5,30 +5,34 @@ import { FormsModule } from '@angular/forms';
 import { StoreModule } from '@ngrx/store';
 
 import { PeopleComponent } from './people.component';
-import { PartyStatsComponent } from './party-stats/party-stats.component';
 import { PersonInputComponent } from './person-input/person-input.component';
 import { PersonListComponent } from './person-list/person-list.component';
+import { FilterSelectComponent } from './filter-select/filter-select.component';
+import { PartyStatsComponent } from './party-stats/party-stats.component';
 
 import { peopleReducer } from './people';
+import { partyFilterReducer } from './partyFilter';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     // we can set a table name 'people' and match it to the reducer
-    StoreModule.forRoot({ people: peopleReducer })
+    StoreModule.forRoot({ people: peopleReducer, partyFilter: partyFilterReducer })
   ],
   declarations: [
     PeopleComponent,
-    PartyStatsComponent,
     PersonInputComponent,
-    PersonListComponent
+    PersonListComponent,
+    FilterSelectComponent,
+    PartyStatsComponent
   ],
   exports: [
     PeopleComponent,
-    PartyStatsComponent,
     PersonInputComponent,
-    PersonListComponent
+    PersonListComponent,
+    FilterSelectComponent,
+    PartyStatsComponent
   ],
   providers: [],
 })

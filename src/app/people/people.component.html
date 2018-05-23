@@ -2,11 +2,12 @@
 <person-input (addPerson)="addPerson($event)">
 </person-input>
 
-<person-list [people]="people | async" (addGuest)="addGuest($event)" (removeGuest)="removeGuest($event)" (removePerson)="removePerson($event)"
-  (toggleAttending)="toggleAttending($event)">
+<person-list [people]="people$ | async" [filter]="filter$ | async" (addGuest)="addGuest($event)" (removeGuest)="removeGuest($event)"
+  (removePerson)="removePerson($event)" (toggleAttending)="toggleAttending($event)">
 </person-list>
 
-<!-- 
-  <party-stats>
-  </party-stats> 
--->
+<filter-select (updateFilter)="filterPeople($event)">
+</filter-select>
+
+<party-stats [invited]="(people$ | async)?.length" [attending]="(attending$ | async)?.length" [guests]="(guests$ | async)">
+</party-stats>

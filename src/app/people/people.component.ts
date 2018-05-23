@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { People } from './people';
-import { Subscription, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { Subscription, Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 import {
   ADD_GUEST,
@@ -20,7 +21,10 @@ import { idGen } from 'src/app/core/utils';
 })
 export class PeopleComponent {
   // public people: People = null;
-  public people: Observable<People> = null;
+  public people$: Observable<People[]> = null;
+  public filter$: Observable<any> = null;
+  public attending$: Observable<People[]> = null;
+  public guests$: Observable<any> = null;
   private subscription: Subscription;
 
   constructor(
@@ -37,6 +41,16 @@ export class PeopleComponent {
     //     this.people = people;
     //   });
 
+    // /*
+    //  * I don't understand how 'partyFilter' is linked to the list of 'people' from the store
+    //  */
+    // this.subscription = this._store
+    //   // Name must match reducer name (as a table)
+    //   .select('partyFilter')
+    //   .subscribe((result) => {
+    //     console.log(result);
+    //   });
+
     /*
       Observable of people, utilzing the async pipe
       in our templates this will be subscribed to, with
@@ -44,7 +58,14 @@ export class PeopleComponent {
       Unsubscribe wil be called automatically when component
       is disposed.
     */
-    this.people = _store.select('people');
+    this.people$ = _store.select('people');
+    this.filter$ = _store.select('partyFilter');
+    this.attending$ = this.people$.pipe(map(partyList => partyList.filter(person => person.attending)));
+    this.guests$ = this.people$.pipe(
+      map(partyList => partyList
+        .map(person => person.guests)
+        .reduce((acc, curr) => acc + curr, 0))
+    );
   }
 
   // all state-changing actions get dispatched to and handled by reducers
@@ -66,6 +87,10 @@ export class PeopleComponent {
 
   toggleAttending(id: number) {
     this._store.dispatch({ type: TOGGLE_ATTENDING, payload: id });
+  }
+
+  filterPeople(action: string) {
+    this._store.dispatch({ type: action });
   }
 
   // /*

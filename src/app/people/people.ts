@@ -1,3 +1,4 @@
+import { Action } from '@ngrx/store';
 import {
   ADD_PERSON,
   REMOVE_PERSON,
@@ -5,7 +6,6 @@ import {
   REMOVE_GUEST,
   TOGGLE_ATTENDING
 } from '../actions/actions';
-import { Action } from '@ngrx/store';
 
 /**
  * Person reducer
