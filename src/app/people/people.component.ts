@@ -1,6 +1,6 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { People } from './people';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import {
@@ -18,23 +18,33 @@ import { idGen } from 'src/app/core/utils';
   templateUrl: './people.component.html',
   styleUrls: ['./people.component.css']
 })
-export class PeopleComponent implements OnDestroy {
-  public people: People = null;
+export class PeopleComponent {
+  // public people: People = null;
+  public people: Observable<People> = null;
   private subscription: Subscription;
 
   constructor(
     private _store: Store<any>
   ) {
+    // /*
+    //   demonstrating use without the async pipe,
+    //   we will explore the async pipe in the next lesson
+    // */
+    // this.subscription = this._store
+    //   // Name must match reducer name (as a table)
+    //   .select('people')
+    //   .subscribe((people: People) => {
+    //     this.people = people;
+    //   });
+
     /*
-      demonstrating use without the async pipe,
-      we will explore the async pipe in the next lesson
+      Observable of people, utilzing the async pipe
+      in our templates this will be subscribed to, with
+      new values being dispayed in our template.
+      Unsubscribe wil be called automatically when component
+      is disposed.
     */
-    this.subscription = this._store
-      // Name must match reducer name (as a table)
-      .select('people')
-      .subscribe((people: People) => {
-        this.people = people;
-      });
+    this.people = _store.select('people');
   }
 
   // all state-changing actions get dispatched to and handled by reducers
@@ -58,11 +68,11 @@ export class PeopleComponent implements OnDestroy {
     this._store.dispatch({ type: TOGGLE_ATTENDING, payload: id });
   }
 
-  /*
-    if you do not use async pipe and create manual subscriptions
-    always remember to unsubscribe in ngOnDestroy
-  */
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
+  // /*
+  //   if you do not use async pipe and create manual subscriptions
+  //   always remember to unsubscribe in ngOnDestroy
+  // */
+  // ngOnDestroy() {
+  //   this.subscription.unsubscribe();
+  // }
 }

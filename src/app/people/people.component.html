@@ -2,7 +2,7 @@
 <person-input (addPerson)="addPerson($event)">
 </person-input>
 
-<person-list [people]="people" (addGuest)="addGuest($event)" (removeGuest)="removeGuest($event)" (removePerson)="removePerson($event)"
+<person-list [people]="people | async" (addGuest)="addGuest($event)" (removeGuest)="removeGuest($event)" (removePerson)="removePerson($event)"
   (toggleAttending)="toggleAttending($event)">
 </person-list>
 
