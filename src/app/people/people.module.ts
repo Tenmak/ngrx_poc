@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { StoreModule } from '@ngrx/store';
 
 import { PeopleComponent } from './people.component';
@@ -13,7 +14,9 @@ import { peopleReducer } from './people';
 @NgModule({
   imports: [
     CommonModule,
-    StoreModule.forRoot({ peopleReducer })
+    FormsModule,
+    // we can set a table name 'people' and match it to the reducer
+    StoreModule.forRoot({ people: peopleReducer })
   ],
   declarations: [
     PeopleComponent,

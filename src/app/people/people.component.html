@@ -1,9 +1,12 @@
-<h1>@ngrx/store Party Planner</h1>
-<person-list>
-</person-list>
-
-<person-input>
+<h1>@ngrx/store Party Planner smart component</h1>
+<person-input (addPerson)="addPerson($event)">
 </person-input>
 
-<party-stats>
-</party-stats>
+<person-list [people]="people" (addGuest)="addGuest($event)" (removeGuest)="removeGuest($event)" (removePerson)="removePerson($event)"
+  (toggleAttending)="toggleAttending($event)">
+</person-list>
+
+<!-- 
+  <party-stats>
+  </party-stats> 
+-->

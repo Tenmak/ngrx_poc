@@ -5,26 +5,26 @@ import {
   REMOVE_GUEST,
   TOGGLE_ATTENDING
 } from '../actions/actions';
+import { Action } from '@ngrx/store';
 
 /**
  * Person reducer
  * @param state Slice of whole people from store
  * @param action The action that updates this slice
  */
-export const peopleReducer = (state: People[] = [], action: any) => {
+export const peopleReducer = (state: People[] = [], action: Action) => {
   switch (action.type) {
     case ADD_PERSON:
       const basePerson: Partial<People> = {
-        id: action.payload.id,
-        name: action.payload.name
+        id: (action as any).payload.id,
+        name: (action as any).payload.name
       };
       return [
         ...state,
         Object.assign({}, createNewPerson(basePerson))
       ];
     case REMOVE_PERSON:
-      console.log(action.payload);
-      return state.filter(person => person.id !== action.payload);
+      return state.filter(person => person.id !== (action as any).payload);
     // to shorten our case statements, delegate detail updates to second private reducer
     case ADD_GUEST:
       return state.map(person => detailPersonReducer(person, action));
