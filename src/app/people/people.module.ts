@@ -4,6 +4,10 @@ import { CommonModule } from '@angular/common';
 import { StoreModule } from '@ngrx/store';
 
 import { PeopleComponent } from './people.component';
+import { PartyStatsComponent } from './party-stats/party-stats.component';
+import { PersonInputComponent } from './person-input/person-input.component';
+import { PersonListComponent } from './person-list/person-list.component';
+
 import { peopleReducer } from './people';
 
 @NgModule({
@@ -12,10 +16,16 @@ import { peopleReducer } from './people';
     StoreModule.forRoot({ peopleReducer })
   ],
   declarations: [
-    PeopleComponent
+    PeopleComponent,
+    PartyStatsComponent,
+    PersonInputComponent,
+    PersonListComponent
   ],
   exports: [
-    PeopleComponent
+    PeopleComponent,
+    PartyStatsComponent,
+    PersonInputComponent,
+    PersonListComponent
   ],
   providers: [],
 })
