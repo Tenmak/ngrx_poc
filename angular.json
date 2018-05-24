@@ -118,5 +118,8 @@
       }
     }
   },
-  "defaultProject": "ngrx-poc"
+  "defaultProject": "ngrx-poc",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }

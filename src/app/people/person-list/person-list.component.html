@@ -1,0 +1,11 @@
+<h3>Person List dumb component</h3>
+<ul>
+  <li *ngFor="let person of people" [class.attending]="person.attending">
+    {{person.name}} - Guests: {{person.guests}}
+    <button (click)="addGuest.emit(person.id)">+</button>
+    <button *ngIf="person.guests" (click)="removeGuest.emit(person.id)">-</button>
+    Attending?
+    <input type="checkbox" [(ngModel)]="person.attending" (click)="toggleAttending.emit(person.id)" />
+    <button (click)="removePerson.emit(person.id)">Delete</button>
+  </li>
+</ul>

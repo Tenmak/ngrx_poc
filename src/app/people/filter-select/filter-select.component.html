@@ -1,0 +1,8 @@
+<h3>Filter Select dumb component</h3>
+<div>
+  <select #selectList (change)="updateFilter.emit(selectList.value)">
+    <option *ngFor="let filter of filters" value="{{filter.action}}">
+      {{filter.friendly}}
+    </option>
+  </select>
+</div>
