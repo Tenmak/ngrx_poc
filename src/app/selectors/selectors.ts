@@ -1,4 +1,4 @@
-import { Store } from '@ngrx/store';
+import { Store, Selector } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 
@@ -6,7 +6,7 @@ import { People } from '../people/people';
 import { Model } from '../people/people.component';
 
 export const partyModel = () => {
-  return (state: Store<any>) => state
+  return (state) => state
     .pipe(
       map(([people, filter]) => {
         return {
@@ -14,7 +14,7 @@ export const partyModel = () => {
           people: people.filter(filter),
           attending: people.filter(person => person.attending).length,
           guests: people.reduce((acc, curr) => acc + curr.guests, 0)
-        };
+        } as Model;
       })
     );
 };
