@@ -1,4 +1,8 @@
 <h1>@ngrx/store Party Planner smart component</h1>
+<div class="margin-bottom-10">
+  Percent Attendance: {{percentAttendance | async}}%
+</div>
+
 <person-input (addPerson)="addPerson($event)">
 </person-input>
 

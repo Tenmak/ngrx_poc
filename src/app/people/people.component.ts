@@ -5,6 +5,8 @@ import { Subscription, Observable, pipe, OperatorFunction } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 
+import { attendees, partyModel, percentAttending } from '../selectors/selectors';
+
 import {
   ADD_GUEST,
   TOGGLE_ATTENDING,
@@ -29,6 +31,7 @@ export class PeopleComponent {
   // public guests$: Observable<any> = null;
 
   public model: Observable<Model>;
+  public percentAttendance: Observable<any>;
 
   constructor(
     private _store: Store<any>
@@ -60,17 +63,27 @@ export class PeopleComponent {
     //     .reduce((acc, curr) => acc + curr, 0))
     // );
 
+    // this.model = combineLatest(
+    //   _store.select('people'),
+    //   _store.select('partyFilter'),
+    //   (people: People[], partyFilter: any) => {
+    //     return {
+    //       total: people.length,
+    //       people: people.filter(partyFilter),
+    //       attending: people.filter(person => person.attending).length,
+    //       guests: people.reduce((acc, curr) => acc + curr.guests, 0)
+    //     };
+    //   });
+
     this.model = combineLatest(
       _store.select('people'),
-      _store.select('partyFilter'),
-      (people: People[], partyFilter: any) => {
-        return {
-          total: people.length,
-          people: people.filter(partyFilter),
-          attending: people.filter(person => person.attending).length,
-          guests: people.reduce((acc, curr) => acc + curr.guests, 0)
-        };
-      });
+      _store.select('partyFilter')
+    )
+      // extracting party model to selector
+      .pipe(partyModel());
+
+    // for demonstration on combining selectors
+    this.percentAttendance = _store.pipe(percentAttending());
   }
 
   // all state-changing actions get dispatched to and handled by reducers
@@ -107,7 +120,7 @@ export class PeopleComponent {
   // }
 }
 
-interface Model {
+export interface Model {
   total: number;
   people: People[];
   attending: number;
