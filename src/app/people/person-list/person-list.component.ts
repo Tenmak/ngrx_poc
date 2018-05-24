@@ -9,7 +9,6 @@ import { People } from '../people';
 })
 export class PersonListComponent {
   @Input() people: People = null;
-  @Input() filter: People;
   @Output() addGuest = new EventEmitter();
   @Output() removeGuest = new EventEmitter();
   @Output() removePerson = new EventEmitter();

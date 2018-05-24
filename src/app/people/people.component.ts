@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { People } from './people';
 import { Store } from '@ngrx/store';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, pipe, OperatorFunction } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { combineLatest } from 'rxjs/observable/combineLatest';
 
 import {
   ADD_GUEST,
@@ -21,11 +22,13 @@ import { idGen } from 'src/app/core/utils';
 })
 export class PeopleComponent {
   // public people: People = null;
-  public people$: Observable<People[]> = null;
-  public filter$: Observable<any> = null;
-  public attending$: Observable<People[]> = null;
-  public guests$: Observable<any> = null;
-  private subscription: Subscription;
+  // private subscription: Subscription;
+  // public people$: Observable<People[]> = null;
+  // public filter$: Observable<any> = null;
+  // public attending$: Observable<People[]> = null;
+  // public guests$: Observable<any> = null;
+
+  public model: Observable<Model>;
 
   constructor(
     private _store: Store<any>
@@ -42,30 +45,32 @@ export class PeopleComponent {
     //   });
 
     // /*
-    //  * I don't understand how 'partyFilter' is linked to the list of 'people' from the store
-    //  */
-    // this.subscription = this._store
-    //   // Name must match reducer name (as a table)
-    //   .select('partyFilter')
-    //   .subscribe((result) => {
-    //     console.log(result);
-    //   });
+    //   Observable of people, utilizing the async pipe
+    //   in our templates this will be subscribed to, with
+    //   new values being dispayed in our template.
+    //   Unsubscribe wil be called automatically when component
+    //   is disposed.
+    // */
+    // this.people$ = _store.select('people');
+    // this.filter$ = _store.select('partyFilter');
+    // this.attending$ = this.people$.pipe(map(partyList => partyList.filter(person => person.attending)));
+    // this.guests$ = this.people$.pipe(
+    //   map(partyList => partyList
+    //     .map(person => person.guests)
+    //     .reduce((acc, curr) => acc + curr, 0))
+    // );
 
-    /*
-      Observable of people, utilzing the async pipe
-      in our templates this will be subscribed to, with
-      new values being dispayed in our template.
-      Unsubscribe wil be called automatically when component
-      is disposed.
-    */
-    this.people$ = _store.select('people');
-    this.filter$ = _store.select('partyFilter');
-    this.attending$ = this.people$.pipe(map(partyList => partyList.filter(person => person.attending)));
-    this.guests$ = this.people$.pipe(
-      map(partyList => partyList
-        .map(person => person.guests)
-        .reduce((acc, curr) => acc + curr, 0))
-    );
+    this.model = combineLatest(
+      _store.select('people'),
+      _store.select('partyFilter'),
+      (people: People[], partyFilter: any) => {
+        return {
+          total: people.length,
+          people: people.filter(partyFilter),
+          attending: people.filter(person => person.attending).length,
+          guests: people.reduce((acc, curr) => acc + curr.guests, 0)
+        };
+      });
   }
 
   // all state-changing actions get dispatched to and handled by reducers
@@ -100,4 +105,11 @@ export class PeopleComponent {
   // ngOnDestroy() {
   //   this.subscription.unsubscribe();
   // }
+}
+
+interface Model {
+  total: number;
+  people: People[];
+  attending: number;
+  guests: number;
 }
